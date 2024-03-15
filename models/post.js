@@ -26,7 +26,11 @@ const postSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['student', 'professional', 'recruiter'],
-    required: true
+  },
+  postType:
+  {
+    type: String,
+    enum: ['ReactJs', 'NodeJs', 'AUTOCAD','MATLAB','LTSPICE','ARM','Chemical Engineering','Computer Science Engineer','Electrical Engineer','Full Stack'],
   }
 });
 

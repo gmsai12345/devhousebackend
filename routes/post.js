@@ -16,12 +16,12 @@ const postrouter = express.Router();
 //Create a User
 postrouter.post("/post", async (req, res) => {
   try {
-    const {userId,content,type} = req.body;
+    const {userId,content,type,postType} = req.body;
     console.log(userId);
     const newpost = new Post({
         userId,
         content,
-        type});
+        type,postType});
     await newpost.save();
     res.status(201).send(newpost);
   } catch (error) {
