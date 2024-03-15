@@ -27,6 +27,13 @@ const jobSchema = new mongoose.Schema({
   salary: {
     type: Number
   },
+  companyDescription:
+  {
+    type:String
+  },
+  companyName:{
+    type:String
+  },
   createdAt: {
     type: Date,
     default: Date.now
