@@ -26,6 +26,20 @@ exports.getPost=async(req,res)=>
         res.status(500).json({ message: "Internal server error" });
       } 
 }
+exports.getPostById = async(req,res)=>
+{
+  try {
+    const { postId } = req.params;
+    const post = await Post.findOne(postId );
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    res.status(200).json({post});
+  } catch (error) {
+    console.error('Error getting post:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 exports.like=async(req,res)=>
 {
   try {

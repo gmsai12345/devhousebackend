@@ -1,5 +1,5 @@
 // const express = require('express');
- const { getPost, like, dislike} = require('../controllers/post');
+ const { getPost, like, dislike,getPostById} = require('../controllers/post');
 
 // const postRoutes = express.Router();
 // // postRoutes.post('/post',post);
@@ -51,6 +51,7 @@ postrouter.put("/postimage/:id", upload.single("userImage"), async (req, res) =>
   }
 });
 postrouter.get("/getpost/:type",getPost)
+postrouter.get("/getpostbyid/:id",getPostById)
 postrouter.get("/increase-likes",like)
 postrouter.get("/decrease-likes",dislike)
 
