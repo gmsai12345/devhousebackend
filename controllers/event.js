@@ -3,7 +3,7 @@ exports.post= async(req,res)=>
 {
     try {
         // Extract contest details from the request body
-        const { title, description, startTime, endTime, type } = req.body;
+        const { title, description, startTime, endTime, type,url } = req.body;
     
         // Create a new contest object
         const newContest = new Event({
@@ -11,7 +11,8 @@ exports.post= async(req,res)=>
           description,
           startTime,
           endTime,
-          type
+          type,
+          url
         });
     
         // Save the contest to the database
