@@ -198,3 +198,42 @@ exports.unfollow= async(req,res)=>
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+exports.getById=async(req,res) =>
+{
+  try {
+    const { userId } = req.query;
+
+    // Find the user by userId
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+exports.search = async(req,res)=>
+{
+  try {
+    const { name } = req.query;
+
+    // Create a regex name with case-insensitive matching
+    const regex = new RegExp(name, 'i');
+
+    // Find users whose username matches the regex name
+    const users = await User.find({ username: regex });
+
+    if (!users.length) {
+      return res.status(404).json({ message: 'No users found matching the name' });
+    }
+
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error('Error searching for users:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
