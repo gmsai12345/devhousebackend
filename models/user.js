@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
     studentfollowers: [{
       type: String,
     }],
-    professsionafollowers: [{
+    professsionalfollowers: [{
       type: String,
     }],
     recruiterfollowers: [{
@@ -47,7 +47,10 @@ const userSchema = new mongoose.Schema({
     recruiterfollowing: [{
       type: String,
     }],
-    experience: Number||0,
+    experience: 
+    {
+      type:String
+    },
     linkedinLink:String,
     achievements: [String],
     education: String,
