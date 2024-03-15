@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
+const uuid4 = require('uuid4');
 
 const contestSchema = new mongoose.Schema({
+  eventId:
+  {
+    type:String,
+    default:uuid4()
+  },
   title: {
     type: String,
     required: true

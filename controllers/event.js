@@ -37,3 +37,17 @@ exports.getEvents= async(req,res)=>
         res.status(500).json({ error: 'Internal server error' });
       }
 }
+exports.getEventById=async(req,res)=>
+{
+  try {
+    const { contestId } = req.params;
+    const contest = await Event.findOne(contestId);
+    if (!contest) {
+      return res.status(404).json({ message: 'Contest not found' });
+    }
+    res.status(200).json(contest);
+  } catch (error) {
+    console.error('Error getting contest:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
