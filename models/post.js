@@ -30,7 +30,7 @@ const postSchema = new mongoose.Schema({
   postType:
   {
     type: String,
-    enum: ['ReactJs', 'NodeJs', 'AUTOCAD','MATLAB','LTSPICE','ARM','Chemical Engineering','Computer Science Engineer','Electrical Engineer','Full Stack'],
+    // enum: ['ReactJs', 'NodeJs', 'AUTOCAD','MATLAB','LTSPICE','ARM','Chemical Engineering','Computer Science Engineer','Electrical Engineer','Full Stack'],
   }
 });
 
