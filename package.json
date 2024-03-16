@@ -17,6 +17,7 @@
     "author": "df",
     "license": "ISC",
     "dependencies": {
+        "@expertai/nlapi": "^2.0.0",
         "bcryptjs": "^2.4.3",
         "cloudinary": "^2.0.3",
         "cors": "^2.8.5",

@@ -6,6 +6,7 @@ const userRoutes = require('./routes/users');
 const jobRoutes = require('./routes/job');
 const postrouter = require('./routes/post');
 const eventRoutes = require('./routes/event');
+const {hatespeechdetection} = require("./controllers/hatespeechdetection")
 const app = express();
 const PORT = process.env.PORT || 5000;
 const CONNECTION_URL = process.env.MONGODB_URI;
@@ -28,6 +29,7 @@ app.use('/user', userRoutes);
 app.use('/job', jobRoutes);
 app.use('/post', postrouter);
 app.use('/event', eventRoutes);
+app.use('/hatespeechdetection',hatespeechdetection)
 const server = app.listen(process.env.PORT || 5000, () => {
   console.log('Server started');
 });
