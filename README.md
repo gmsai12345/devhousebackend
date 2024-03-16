@@ -98,14 +98,5 @@ $ npm install
 Run server (nodemon)
 
 ```bash
-$ nodemon index.js
-
-```
-
-Run server (client)
-
-```bash
-$ cd client
 $ npm start
-
 ```
