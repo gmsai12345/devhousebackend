@@ -98,7 +98,7 @@ $ npm install
 Run server (nodemon)
 
 ```bash
-$ nodemon
+$ nodemon index.js
 
 ```
 
