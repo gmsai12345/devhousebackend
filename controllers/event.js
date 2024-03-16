@@ -51,3 +51,15 @@ exports.getEventById=async(req,res)=>
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+exports.getallevents=async(req,res)=>
+{
+  try{
+    const allevents = await Event.find();
+    res.status(200).json(allevents);
+
+  }
+  catch(err){
+    res.status(500).json({ err: 'Internal server error' });
+
+  }
+}

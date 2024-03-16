@@ -41,7 +41,7 @@ exports.post = async (req, res) => {
 exports.filter = async (req, res) => {
   try {
     const { skills } = req.body;
-    // const processedSkills = skills.map(skill => skill.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''));
+    const processedSkills = skills.map(skill => skill.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''));
     const query = { skillsRequired: { $all: skills } };
     const filteredJobs = await Job.find(query);
     res.json(filteredJobs);
@@ -68,5 +68,17 @@ exports.getJobsById = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
+  }
+}
+exports.getalljobs=async(req,res)=>
+{
+  try
+  {
+    const alljobs = await Job.find();
+    res.status(200).json(alljobs);
+  }
+  catch(err)
+  {
+    res.status(500).json("error",err);
   }
 }
