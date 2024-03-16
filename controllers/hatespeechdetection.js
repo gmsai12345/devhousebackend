@@ -32,7 +32,7 @@ exports.hatespeechdetection=async(req,res)=>
           }
           else
           {
-            res.status(403).json("good speech");
+            res.status(200).json("good speech");
           }
           console.log(result.data.sentiment.overall);
       })
