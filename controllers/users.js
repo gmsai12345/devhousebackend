@@ -68,13 +68,16 @@ exports.onBoard = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const { experience, mentorshipStatus, jobDescription, mentorshipRate, calendarLink,linkedinLink } = req.body;
+    const { experience, mentorshipStatus, jobDescription, mentorshipRate, calendarLink,linkedinLink,education,achievements } = req.body;
 
     // Update user profile based on role
     if (user.role === 'student') {
       const skills = req.body.skills;
       user.profile.skills= skills;
       user.profile.linkedinLink = linkedinLink;
+      user.profile.linkedinLink = linkedinLink;
+      user.profile.achievements = achievements;
+
     } else if (user.role === 'professional') {
       user.profile.skills = req.body.skills;
       user.profile.experience = experience;
@@ -83,12 +86,17 @@ exports.onBoard = async (req, res) => {
       user.profile.mentorshipRate = mentorshipRate;
       user.profile.calendarLink = calendarLink;
       user.profile.linkedinLink = linkedinLink;
+      user.profile.education = education;
+      user.profile.achievements = achievements;
 
     } else {
       user.profile.skills = req.body.skills;
       user.profile.experience = experience;
       user.profile.jobDescription = jobDescription;
       user.profile.linkedinLink = linkedinLink;
+      user.profile.education = education;
+      user.profile.achievements = achievements;
+
     }
 
     await user.save();

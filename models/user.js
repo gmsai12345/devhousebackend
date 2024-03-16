@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema({
       type:String
     },
     linkedinLink:String,
-    achievements: [String],
+    achievements: {type:"String"},
     education: {type:String},
     skills: [String],
     mentorshipStatus: {
