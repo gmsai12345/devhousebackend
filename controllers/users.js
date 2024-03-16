@@ -70,45 +70,42 @@ exports.onBoard = async (req, res) => {
   try {
     const email = req.body.email;
     const user = await User.findOne({ email });
-
+  
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    const { experience, mentorshipStatus, jobDescription, mentorshipRate, calendarLink,linkedinLink,education,achievements } = req.body;
-
+  
+    const { experience, mentorshipStatus, jobDescription, mentorshipRate, calendarLink, linkedinLink, education, achievements } = req.body;
+  
     // Update user profile based on role
+    let updateFields = {
+      profile: {
+        skills: req.body.skills,
+        linkedinLink: linkedinLink,
+        achievements: achievements,
+      }
+    };
+  
     if (user.role === 'student') {
-      const skills = req.body.skills;
-      user.profile.skills= skills;
-      user.profile.linkedinLink = linkedinLink;
-      user.profile.linkedinLink = linkedinLink;
-      user.profile.achievements = achievements;
-
+      updateFields.profile.skills = req.body.skills;
+  
     } else if (user.role === 'professional') {
-      user.profile.skills = req.body.skills;
-      user.profile.experience = experience;
-      user.profile.mentorshipStatus = mentorshipStatus;
-      user.profile.jobDescription = jobDescription;
-      user.profile.mentorshipRate = mentorshipRate;
-      user.profile.calendarLink = calendarLink;
-      user.profile.linkedinLink = linkedinLink;
-      user.profile.education = education;
-      user.profile.achievements = achievements;
-
+      updateFields.profile.experience = experience;
+      updateFields.profile.mentorshipStatus = mentorshipStatus;
+      updateFields.profile.jobDescription = jobDescription;
+      updateFields.profile.mentorshipRate = mentorshipRate;
+      updateFields.profile.calendarLink = calendarLink;
+      updateFields.profile.education = education;
+  
     } else {
-      user.profile.skills = req.body.skills;
-      user.profile.experience = experience;
-      user.profile.jobDescription = jobDescription;
-      user.profile.linkedinLink = linkedinLink;
-      user.profile.education = education;
-      user.profile.achievements = achievements;
-
+      updateFields.profile.experience = experience;
+      updateFields.profile.jobDescription = jobDescription;
+      updateFields.profile.education = education;
     }
-
-    await user.save();
-
-    res.status(200).json({ message: 'User profile updated successfully', user });
+  
+    await User.updateOne({ email }, { $set: updateFields });
+  
+    res.status(200).json({ message: 'User profile updated successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
@@ -121,49 +118,46 @@ exports.follow = async(req,res) =>
     const { followerUserId } = req.query;
     console.log(followedUserId)
     console.log(followerUserId)
-
+  
     // Find the follower user
     const followerUser = await User.findOne({ userId: followerUserId });
     if (!followerUser) {
       return res.status(404).json({ error: 'Follower user not found' });
     }
-
+  
     // Find the followed user
     const followedUser = await User.findOne({ userId: followedUserId });
     if (!followedUser) {
       return res.status(404).json({ error: 'Followed user not found' });
     }
-
+  
     // Determine the roles of both users
     const followerUserRole = followerUser.role;
     const followedUserRole = followedUser.role;
-
+  
     // Update follower/following lists based on user roles
     switch (followerUserRole) {
       case 'student':
-        followedUser.profile.studentfollowers.push(followerUserId);
-        followerUser.profile.studentfollowing.push(followedUserId);
+        await User.updateOne({ userId: followedUserId }, { $addToSet: { 'profile.studentfollowers': followerUserId } });
+        await User.updateOne({ userId: followerUserId }, { $addToSet: { 'profile.studentfollowing': followedUserId } });
         break;
       case 'professional':
-        followedUser.profile.professionalfollowers.push(followerUserId);
-        followerUser.profile.professionalfollowing.push(followedUserId);
+        await User.updateOne({ userId: followedUserId }, { $addToSet: { 'profile.professionalfollowers': followerUserId } });
+        await User.updateOne({ userId: followerUserId }, { $addToSet: { 'profile.professionalfollowing': followedUserId } });
         break;
       case 'recruiter':
-        followedUser.profile.recruiterfollowers.push(followerUserId);
-        followerUser.profile.recruiterfollowing.push(followedUserId);
+        await User.updateOne({ userId: followedUserId }, { $addToSet: { 'profile.recruiterfollowers': followerUserId } });
+        await User.updateOne({ userId: followerUserId }, { $addToSet: { 'profile.recruiterfollowing': followedUserId } });
         break;
       default:
         return res.status(400).json({ error: 'Invalid user role' });
     }
-
-    // Save both users to update follower/following lists
-    await Promise.all([followerUser.save(), followedUser.save()]);
-
+  
     res.status(200).json({ message: 'Follow action completed successfully' });
   } catch (error) {
     console.error('Error following user:', error);
     res.status(500).json({ error: 'Internal server error' });
-  }
+  }  
 }
 exports.unfollow= async(req,res)=>
 {
