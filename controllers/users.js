@@ -22,7 +22,8 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
       role,
       mobileNumber,
-      coins: 0 // Assuming coins start from 0
+      coins: 0, // Assuming coins start from 0
+      loggedIn:true
     });
 
     await newUser.save();
@@ -39,8 +40,10 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if user exists
+    // Find the user by email
     const user = await User.findOne({ email });
+
+    // If user is null, it means no user was found with the provided email
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
@@ -51,6 +54,10 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    // Update loggedIn field to true if password is valid
+    await User.updateOne({ email }, { loggedIn: true });
+
+    // Send response
     res.status(200).json({ message: 'Login successful', userId: user.userId });
   } catch (error) {
     console.error(error);
@@ -307,6 +314,21 @@ exports.getmentorsByType=async(req,res)=>
     return res.status(200).json(mentorsBySkills);
   } catch (error) {
     console.error('Error retrieving mentors by skills:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+}
+exports.logout=async(req,res)=>
+{
+  try {
+    const { userId } = req.query;
+    // Find the user by userId and update the loggedIn field to false
+    const result = await User.updateOne({ userId }, { $set: { loggedIn: false } });
+    if (result.nModified === 0) {
+      return res.status(404).json({ message: 'User not found or already logged out' });
+    }
+    return res.status(200).json({ message: 'User logged out successfully' });
+  } catch (error) {
+    console.error('Error logging out user:', error.message);
     return res.status(500).json({ error: error.message });
   }
 }

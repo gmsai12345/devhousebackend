@@ -88,6 +88,10 @@ const userSchema = new mongoose.Schema({
   community: [{
     type: String, // Community ids
   }],
+  loggedIn:
+  {
+    type:Boolean
+  }
 });
 
 const User = mongoose.model('User', userSchema);
