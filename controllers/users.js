@@ -332,3 +332,24 @@ exports.logout=async(req,res)=>
     return res.status(500).json({ error: error.message });
   }
 }
+exports.isloggedin=async(req,res)=>
+{
+  const { userId } = req.query;
+
+  try {
+    // Find the user by userId
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the user is logged in
+    const isLoggedIn = user.loggedIn || false;
+
+    return res.status(200).json({ isLoggedIn });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
