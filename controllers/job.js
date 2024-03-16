@@ -62,8 +62,8 @@ exports.getJobsByType = async (req, res) => {
 }
 exports.getJobsById = async (req, res) => {
   try {
-    const {id}=req.params;
-    const allJobs = await Job.find({id});
+    const {jobId}=req.params;
+    const allJobs = await Job.find({jobId});
     res.json(allJobs);
   } catch (error) {
     console.error(error);

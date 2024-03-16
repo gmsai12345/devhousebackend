@@ -1,5 +1,5 @@
 const express = require('express');
-const { login, signup,follow,onBoard,unfollow,getById,search,getfollow,getmentors } = require('../controllers/users');
+const { login, signup,follow,onBoard,unfollow,getById,search,getfollow,getmentors,getmentorsByType,getpostbyuserId } = require('../controllers/users');
 
 const userRoutes = express.Router();
 userRoutes.post('/signup', signup);
@@ -11,4 +11,6 @@ userRoutes.get('/getbyid', getById);
 userRoutes.get('/search', search);
 userRoutes.get('/getfollow', getfollow);
 userRoutes.get('/getmentors', getmentors);
+userRoutes.get('/getmentorsbyskill', getmentorsByType);
+
 module.exports = userRoutes;

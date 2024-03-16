@@ -277,3 +277,28 @@ exports.getmentors=async(req,res)=>
     return res.status(500).json({ error: error.message });
   }
 }
+exports.getmentorsByType=async(req,res)=>
+{
+  try {
+    let { skills } = req.query; // Assuming skills is a string separated by commas
+
+    // Split skills string into an array and create a regex pattern
+    skills = skills.split(',').map(skill => skill.trim().replace(/[^a-zA-Z0-9]/g, '\\$&')).join('|');
+
+    // Find qualified users (professionals and recruiters)
+    const qualifiedUsers = await User.find({
+      $or: [{ role: 'professional' }, { role: 'recruiter' }]
+    });
+
+    // Filter qualified users based on regex search against skills
+    const regex = new RegExp(`(${skills})`, 'i');
+    const mentorsBySkills = qualifiedUsers.filter(user =>
+      user.profile.skills.some(skill => regex.test(skill))
+    );
+
+    return res.status(200).json(mentorsBySkills);
+  } catch (error) {
+    console.error('Error retrieving mentors by skills:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+}

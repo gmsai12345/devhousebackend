@@ -82,7 +82,20 @@ exports.dislike=async(req,res)=>
     res.status(500).json({ message: "Internal server error" });
   }
 }
+exports.getpostbyuserid=async(req,res)=>
+{
+  try {
+    const { userId } = req.query;
 
+    // Find posts by userId
+    const posts = await Post.find({ userId });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error('Error retrieving posts by userId:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 // exports.getPost=async(req,res)=>
 // {
 //     try {
