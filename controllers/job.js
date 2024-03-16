@@ -1,34 +1,42 @@
 const Job = require('../models/job.js');
+const User = require('../models/user.js');
 exports.post = async (req, res) => {
-    try {
-        // Extract job details from the request body
-        const { recruiterId, skillsRequired, title, description, location, salary, applicationDeadline,isProcessed,isActive, type, url,companyDescription,companyName } = req.body;
+  try {
+    // Extract job details from the request body
+    const { recruiterId, skillsRequired, title, description, location, salary, applicationDeadline, isProcessed, isActive, type, url, companyDescription, companyName } = req.body;
+
+    // Create a new job object
+    const newJob = new Job({
+      recruiterId,
+      skillsRequired,
+      title,
+      description,
+      location,
+      salary,
+      applicationDeadline,
+      isProcessed,
+      companyDescription,
+      companyName,
+      isActive,
+      type,
+      url
+    });
+
+    // Save the job to the database
+    const savedJob = await newJob.save();
     
-        // Create a new job object
-        const newJob = new Job({
-          recruiterId,
-          skillsRequired,
-          title,
-          description,
-          location,
-          salary,
-          applicationDeadline,
-          isProcessed,
-          companyDescription,
-          companyName,
-          isActive,
-          type,
-          url
-        });
-    
-        // Save the job to the database
-        const savedJob = await newJob.save();
-    
-        res.status(201).json(savedJob); // Respond with the saved job object
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-      }    
+    // Update the user's JobsPosted array
+    await User.findOneAndUpdate(
+      { userId: recruiterId },
+      { $push: { 'profile.JobsPosted': savedJob.jobId } },
+      { new: true }
+    );
+
+    res.status(201).json(savedJob); // Respond with the saved job object
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }
 exports.filter = async (req, res) => {
   try {
