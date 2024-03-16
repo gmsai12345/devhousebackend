@@ -30,8 +30,8 @@ app.use('/user', userRoutes);
 app.use('/job', jobRoutes);
 app.use('/post', postrouter);
 app.use('/event', eventRoutes);
-app.use('/hatespeechdetection',hatespeechdetection)
-app.use('/imagedetection',imagedetection)
+app.post('/hatespeechdetection',hatespeechdetection)
+app.post('/imagedetection',imagedetection)
 const server = app.listen(process.env.PORT || 5000, () => {
   console.log('Server started');
 });
